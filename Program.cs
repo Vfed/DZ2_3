@@ -6,49 +6,75 @@ namespace DZ2_3
     {
         static void Main(string[] args)
         {
-            while (true)
+            int choice = 1;
+            string result = "";
+            bool s1 = false, s2 = false;
+            double number1=0, number2=0;
+
+            while (choice < 3)
             {
-                string result = "";
-                Console.Write("First : ");
-                bool s1 = Double.TryParse(Console.ReadLine(), out double number1);
+                switch (choice) 
+                {
+                    case 1:
+                        Console.Write("First : ");
+                        s1 = Double.TryParse(Console.ReadLine(), out number1);
+                        break;
+                    case 2:
+                        s1 = Double.TryParse(result, out number1);
+                        if (s1)
+                        {
+                            Console.WriteLine("First : " + result);
+                        }
+                        else 
+                        {
+                            Console.Write("First : ");
+                            s1 = Double.TryParse(Console.ReadLine(), out number1);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                result = "";
                 Console.Write("Second : ");
-                bool s2 = Double.TryParse(Console.ReadLine(), out double number2);
-                Console.Write("Operation : ");
-                string op = Console.ReadLine();
+                s2 = Double.TryParse(Console.ReadLine(), out number2);
                 string errorMessage = "";
 
                 if (!(s1 && s2))
                 {
                     errorMessage += "Incorect Numbers; ";
                 }
-
-                if (op == "+")
-                {
-                    result += number1 + number2;
-                }
-                else if (op == "-")
-                {
-                    result += number1 - number2;
-                }
-                else if (op == "*")
-                {
-                    result += number1 * number2;
-                }
-                else if (op == "/")
-                {
-                    if (number2 == 0 && s2)
-                    {
-                        errorMessage += "Divide By Zero; ";
-                    }
-                    else /*if (number2 != 0)*/
-                    {
-                        result += number1 / number2;
-                    }
-                }
                 else
                 {
-                    errorMessage += "Incorect operation; ";
+                    Console.Write("Operation (+,-,*,/,^): ");
+                    string op = Console.ReadLine();
+
+                    switch (op)
+                    {
+                        case "+":
+                            result += number1 + number2;
+                            break;
+                        case "-":
+                            result += number1 - number2;
+                            break;
+                        case "/" when number2 != 0:
+                            result += number1 / number2;
+                            break;
+                        case "/" when number2 == 0:
+                            errorMessage += "Divide by Zero ;";
+                            break;
+                        case "*":
+                            result += number1 * number2;
+                            break;
+                        case "^":
+                            result += Math.Pow(number1, number2);
+                            break;
+                        default:
+                            errorMessage += "Incorect operation; ";
+                            break;
+                    }
                 }
+                
 
                 if (errorMessage.Length > 1)
                 {
@@ -59,8 +85,32 @@ namespace DZ2_3
                     Console.WriteLine(result);
                 }
 
-                Console.ReadKey();
-                Console.Clear();
+                bool choiseKey = false;
+
+                while (!choiseKey) 
+                {
+                    string choiseError = "";
+                    Console.WriteLine("Chose next action (1/2/3): \n1. New operation;\n2. New operation with result;\n3. Exit;");
+                    
+                    bool choiseCheck = Int32.TryParse(Console.ReadLine(), out choice);
+                    
+                    if (choiseCheck && (choice == 1 || choice == 2 || choice == 3))
+                    {
+                        choiseKey = true;
+                    }
+                    else
+                    {
+                        choiseError += "Wrong choise;";
+                    }
+
+                    if (choiseError.Length > 0)
+                    {
+                        Console.WriteLine(choiseError);
+                    }
+                    Console.Clear();
+                }
+
+
             }
         }
     }
